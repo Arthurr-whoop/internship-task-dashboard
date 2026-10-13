@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Task Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <span class="brand-icon">I</span>
+        <span>Intern<span class="brand-light">Flow</span></span>
+      </a>
+
+      <p class="menu-label">MENU UTAMA</p>
+      <nav class="navigation">
+        <a href="#dashboard" class="nav-link active">
+          <span>▦</span> Dashboard
+        </a>
+        <a href="#tasks" class="nav-link">
+          <span>☷</span> Daftar Tugas
+        </a>
+        <a href="#activity" class="nav-link">
+          <span>◷</span> Aktivitas
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <div class="help-icon">✦</div>
+          <strong>Tetap produktif!</strong>
+          <p>Selesaikan tugasmu satu per satu dan rayakan progres kecilmu.</p>
+        </div>
+        <p class="sidebar-footer">InternFlow Dashboard · v1.0</p>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">WORKSPACE / INTERNSHIP</p>
+          <h1>Dashboard</h1>
+          <p class="subtitle">Selamat datang! Yuk, cek progres magangmu hari ini.</p>
+        </div>
+        <div class="profile">
+          <div class="avatar">IN</div>
+          <div>
+            <strong>Internship Student</strong>
+            <span>Intern / Trainee</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="welcome-banner">
+        <div class="welcome-copy">
+          <span class="welcome-tag">YOUR WORKSPACE</span>
+          <h2>Small steps, big progress.</h2>
+          <p>Atur pekerjaanmu, pantau progres, dan capai target magangmu.</p>
+          <a href="#tasks" class="banner-button">Lihat tugas <span>→</span></a>
+        </div>
+        <div class="banner-art" aria-hidden="true">
+          <div class="art-circle"></div>
+          <div class="art-card">
+            <span class="art-check">✓</span>
+            <div>
+              <strong>Keep going!</strong>
+              <p>You're making progress</p>
+            </div>
+          </div>
+          <div class="art-orbit orbit-one"></div>
+          <div class="art-orbit orbit-two"></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div>
+            <h2>Ringkasan Tugas</h2>
+            <p>Gambaran progres pekerjaanmu saat ini.</p>
+          </div>
+          <span class="period-label">SEMUA TUGAS</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon blue-icon">▤</span>
+              <span class="stat-caption">Total tugas</span>
+            </div>
+            <div class="stat-value" id="totalTasks">5</div>
+            <p class="stat-description">Semua tugas yang tercatat</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon green-icon">✓</span>
+              <span class="stat-caption">Selesai</span>
+            </div>
+            <div class="stat-value" id="completedTasks">2</div>
+            <p class="stat-description">Tugas berhasil diselesaikan</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon orange-icon">◷</span>
+              <span class="stat-caption">Berjalan</span>
+            </div>
+            <div class="stat-value" id="progressTasks">2</div>
+            <p class="stat-description">Tugas sedang dikerjakan</p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon purple-icon">◈</span>
+              <span class="stat-caption">Belum mulai</span>
+            </div>
+            <div class="stat-value" id="pendingTasks">1</div>
+            <p class="stat-description">Tugas menunggu dikerjakan</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="tasks">
+        <div class="section-heading tasks-heading">
+          <div>
+            <h2>Daftar Tugas</h2>
+            <p>Kelola dan pantau pekerjaan magangmu.</p>
+          </div>
+          <button class="primary-button" id="addTaskButton">
+            <span>＋</span> Tambah Tugas
+          </button>
+        </div>
+
+        <div class="task-toolbar">
+          <label class="search-box">
+            <span>⌕</span>
+            <input type="search" id="searchInput" placeholder="Cari nama tugas..." aria-label="Cari tugas">
+          </label>
+          <select id="statusFilter" aria-label="Filter status">
+            <option value="all">Semua status</option>
+            <option value="pending">Belum mulai</option>
+            <option value="progress">Berjalan</option>
+            <option value="completed">Selesai</option>
+          </select>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Tugas</th>
+                <th>Deadline</th>
+                <th>Prioritas</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="taskTableBody">
+              <tr>
+                <td>
+                  <div class="task-name">Mempelajari alur kerja tim</div>
+                  <div class="task-category">Orientasi</div>
+                </td>
+                <td>15 Okt 2026</td>
+                <td><span class="priority medium">Sedang</span></td>
+                <td><span class="status completed">Selesai</span></td>
+                <td><button class="text-button" type="button">Detail</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="task-name">Membuat laporan mingguan</div>
+                  <div class="task-category">Administrasi</div>
+                </td>
+                <td>16 Okt 2026</td>
+                <td><span class="priority high">Tinggi</span></td>
+                <td><span class="status progress">Berjalan</span></td>
+                <td><button class="text-button" type="button">Detail</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="task-name">Merapikan dokumentasi</div>
+                  <div class="task-category">Dokumentasi</div>
+                </td>
+                <td>17 Okt 2026</td>
+                <td><span class="priority medium">Sedang</span></td>
+                <td><span class="status progress">Berjalan</span></td>
+                <td><button class="text-button" type="button">Detail</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="task-name">Mempelajari tools kerja</div>
+                  <div class="task-category">Pengembangan</div>
+                </td>
+                <td>19 Okt 2026</td>
+                <td><span class="priority low">Rendah</span></td>
+                <td><span class="status pending">Belum mulai</span></td>
+                <td><button class="text-button" type="button">Detail</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="task-name">Evaluasi hasil pekerjaan</div>
+                  <div class="task-category">Evaluasi</div>
+                </td>
+                <td>20 Okt 2026</td>
+                <td><span class="priority high">Tinggi</span></td>
+                <td><span class="status completed">Selesai</span></td>
+                <td><button class="text-button" type="button">Detail</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="empty-state" id="emptyState" hidden>Tidak ada tugas yang cocok dengan pencarianmu.</p>
+        </div>
+      </section>
+
+      <section class="section-block activity-section" id="activity">
+        <div class="section-heading">
+          <div>
+            <h2>Aktivitas Terbaru</h2>
+            <p>Catatan perubahan pada daftar tugas.</p>
+          </div>
+        </div>
+        <div class="activity-card" id="activityList">
+          <div class="activity-item">
+            <span class="activity-dot dot-green"></span>
+            <div>
+              <strong>Evaluasi hasil pekerjaan</strong>
+              <p>Status tugas ditandai selesai.</p>
+            </div>
+            <span class="activity-time">Contoh</span>
+          </div>
+          <div class="activity-item">
+            <span class="activity-dot dot-blue"></span>
+            <div>
+              <strong>Membuat laporan mingguan</strong>
+              <p>Tugas sedang dalam pengerjaan.</p>
+            </div>
+            <span class="activity-time">Contoh</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>© 2026 InternFlow Dashboard</span>
+        <span>Built for learning & productivity.</span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="taskDialog">
+    <form id="taskForm">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">TASK MANAGEMENT</p>
+          <h2>Tambah Tugas Baru</h2>
+        </div>
+        <button type="button" class="close-button" id="closeDialog" aria-label="Tutup">×</button>
+      </div>
+
+      <label for="taskTitle">Nama tugas</label>
+      <input id="taskTitle" name="title" required maxlength="100" placeholder="Contoh: Membuat laporan">
+
+      <label for="taskCategory">Kategori</label>
+      <input id="taskCategory" name="category" maxlength="50" placeholder="Contoh: Administrasi">
+
+      <label for="taskDeadline">Deadline</label>
+      <input id="taskDeadline" name="deadline" type="date" required>
+
+      <label for="taskPriority">Prioritas</label>
+      <select id="taskPriority" name="priority">
+        <option value="low">Rendah</option>
+        <option value="medium" selected>Sedang</option>
+        <option value="high">Tinggi</option>
+      </select>
+
+      <label for="taskStatus">Status</label>
+      <select id="taskStatus" name="status">
+        <option value="pending">Belum mulai</option>
+        <option value="progress">Berjalan</option>
+        <option value="completed">Selesai</option>
+      </select>
+
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="cancelDialog">Batal</button>
+        <button type="submit" class="primary-button">Simpan Tugas</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
