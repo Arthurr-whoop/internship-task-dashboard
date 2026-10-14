@@ -1,37 +1,361 @@
+
 <!doctype html>
-<html lang="id"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>InternFlow — Task Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
-<section id="authView" class="auth-shell"><div class="auth-card">
-<div class="brand-mark">IF</div><p class="eyebrow">INTERNFLOW WORKSPACE</p><h1>Selamat datang kembali</h1>
-<p class="muted">Masuk untuk melihat dan mengelola tugas internship.</p>
-<form id="loginForm"><label for="email">Email</label><input id="email" type="email" autocomplete="username" placeholder="nama@email.com" required>
-<label for="password">Kata sandi</label><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required>
-<button class="primary-btn full" type="submit">Masuk ke dashboard</button><p id="authMessage" class="message" role="status"></p></form>
-<p class="small-note">Akun dibuat oleh pengelola melalui Supabase Authentication.</p></div>
-<div class="auth-decoration"><div class="deco-panel"><span class="panel-icon">✓</span><h2>Semua tugas, satu tempat.</h2><p>Pantau progres, deadline, dan prioritas pekerjaanmu dengan lebih mudah.</p><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i></div></div></div></section>
-<main id="appView" class="app-shell" hidden>
-<header class="topbar"><a class="brand" href="#"><span class="brand-mark small-mark">IF</span><span>Intern<span class="brand-accent">Flow</span></span></a>
-<div class="top-actions"><div class="user-chip"><span class="avatar" id="avatarLetter">U</span><div><strong id="userEmail">Pengguna</strong><small id="userRole">User</small></div></div><button id="logoutButton" class="outline-btn">Keluar</button></div></header>
-<section class="welcome-row"><div><p class="eyebrow">WORKSPACE / TASKS</p><h1>Task dashboard</h1><p class="muted">Kelola pekerjaan internship dan pantau progres harianmu.</p></div><button id="addTaskButton" class="primary-btn" hidden>＋ Tambah tugas</button></section>
-<section class="stats-grid">
-<article class="stat-card"><span class="stat-icon blue">▤</span><div><p>Total tugas</p><strong id="totalTasks">0</strong></div></article>
-<article class="stat-card"><span class="stat-icon green">✓</span><div><p>Selesai</p><strong id="completedTasks">0</strong></div></article>
-<article class="stat-card"><span class="stat-icon purple">◷</span><div><p>Sedang berjalan</p><strong id="progressTasks">0</strong></div></article>
-<article class="stat-card"><span class="stat-icon orange">○</span><div><p>Belum mulai</p><strong id="pendingTasks">0</strong></div></article></section>
-<section class="content-card"><div class="section-heading"><div><h2>Daftar tugas</h2><p class="muted">Semua tugas dalam workspace.</p></div><span id="accessBadge" class="role-badge">USER ACCESS</span></div>
-<div class="toolbar"><label class="search-box">⌕ <input id="searchInput" type="search" placeholder="Cari tugas atau kategori..."></label>
-<select id="statusFilter" aria-label="Filter status"><option value="all">Semua status</option><option value="pending">Belum mulai</option><option value="progress">Berjalan</option><option value="completed">Selesai</option></select><button id="refreshButton" class="outline-btn">Muat ulang</button></div>
-<div class="table-wrap"><table><thead><tr><th>TUGAS</th><th>DEADLINE</th><th>PRIORITAS</th><th>STATUS</th><th id="actionHeader">AKSI</th></tr></thead><tbody id="taskTableBody"></tbody></table></div>
-<div id="emptyState" class="empty-state" hidden><div class="empty-icon">▤</div><strong>Belum ada tugas</strong><p>Tugas yang tersedia akan muncul di sini.</p></div><p id="pageMessage" class="message" role="status"></p></section>
-<footer class="footer">InternFlow • Internship task management</footer></main>
-<dialog id="taskDialog" class="task-dialog"><form id="taskForm">
-<div class="dialog-heading"><div><p class="eyebrow">TASK MANAGEMENT</p><h2 id="dialogTitle">Tambah tugas</h2></div><button id="closeDialog" class="close-btn" type="button">×</button></div>
-<label for="taskTitle">Nama tugas</label><input id="taskTitle" name="title" required maxlength="180" placeholder="Membuat laporan mingguan">
-<label for="category">Kategori</label><input id="category" name="category" maxlength="80" placeholder="Administrasi">
-<div class="form-row"><div><label for="deadline">Deadline</label><input id="deadline" name="deadline" type="date"></div><div><label for="priority">Prioritas</label><select id="priority" name="priority"><option value="low">Rendah</option><option value="medium" selected>Sedang</option><option value="high">Tinggi</option></select></div></div>
-<label for="status">Status</label><select id="status" name="status"><option value="pending">Belum mulai</option><option value="progress">Berjalan</option><option value="completed">Selesai</option></select>
-<div class="dialog-actions"><button id="cancelDialog" class="outline-btn" type="button">Batal</button><button class="primary-btn" type="submit">Simpan tugas</button></div><p id="formMessage" class="message" role="status"></p></form></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="script.js"></script></body></html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>InternFlow — Task Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- HALAMAN LOGIN -->
+  <section id="authView" class="auth-shell">
+    <div class="auth-card">
+      <div class="brand-mark">IF</div>
+
+      <p class="eyebrow">INTERNFLOW WORKSPACE</p>
+      <h1>Selamat datang kembali</h1>
+      <p class="muted">
+        Masuk untuk melihat dan mengelola tugas internship.
+      </p>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          autocomplete="username"
+          placeholder="nama@email.com"
+          required
+        >
+
+        <label for="password">Kata sandi</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Masukkan kata sandi"
+          required
+        >
+
+        <button class="primary-btn full" type="submit">
+          Masuk ke dashboard
+        </button>
+
+        <p id="authMessage" class="message" role="status"></p>
+      </form>
+
+      <p class="small-note">
+        Akun dibuat oleh pengelola melalui Supabase Authentication.
+      </p>
+    </div>
+
+    <div class="auth-decoration">
+      <div class="deco-panel">
+        <span class="panel-icon">✓</span>
+        <h2>Semua tugas, satu tempat.</h2>
+        <p>
+          Pantau progres, deadline, dan prioritas pekerjaanmu
+          dengan lebih mudah.
+        </p>
+
+        <div class="mini-bars">
+          <i></i><i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD SETELAH LOGIN -->
+  <main id="appView" class="app-shell" hidden>
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-mark small-mark">IF</span>
+        <span>Intern<span class="brand-accent">Flow</span></span>
+      </a>
+
+      <div class="top-actions">
+        <div class="user-chip">
+          <span class="avatar" id="avatarLetter">U</span>
+          <div>
+            <strong id="userEmail">Pengguna</strong>
+            <small id="userRole">User</small>
+          </div>
+        </div>
+
+        <button
+          id="changePasswordButton"
+          class="outline-btn"
+          type="button"
+        >
+          Ganti Password
+        </button>
+
+        <button id="logoutButton" class="outline-btn" type="button">
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- RINGKASAN DASHBOARD -->
+    <section class="welcome-row">
+      <div>
+        <p class="eyebrow">WORKSPACE / TASKS</p>
+        <h1>Task dashboard</h1>
+        <p class="muted">
+          Kelola pekerjaan internship dan pantau progres harianmu.
+        </p>
+      </div>
+
+      <button id="addTaskButton" class="primary-btn" type="button" hidden>
+        ＋ Tambah tugas
+      </button>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-icon blue">▤</span>
+        <div>
+          <p>Total tugas</p>
+          <strong id="totalTasks">0</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon green">✓</span>
+        <div>
+          <p>Selesai</p>
+          <strong id="completedTasks">0</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon purple">◷</span>
+        <div>
+          <p>Sedang berjalan</p>
+          <strong id="progressTasks">0</strong>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon orange">○</span>
+        <div>
+          <p>Belum mulai</p>
+          <strong id="pendingTasks">0</strong>
+        </div>
+      </article>
+    </section>
+
+    <!-- DAFTAR TUGAS -->
+    <section class="content-card">
+      <div class="section-heading">
+        <div>
+          <h2>Daftar tugas</h2>
+          <p class="muted">Semua tugas dalam workspace.</p>
+        </div>
+
+        <span id="accessBadge" class="role-badge">USER ACCESS</span>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-box">
+          ⌕
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Cari tugas atau kategori..."
+          >
+        </label>
+
+        <select id="statusFilter" aria-label="Filter status">
+          <option value="all">Semua status</option>
+          <option value="pending">Belum mulai</option>
+          <option value="progress">Berjalan</option>
+          <option value="completed">Selesai</option>
+        </select>
+
+        <button id="refreshButton" class="outline-btn" type="button">
+          Muat ulang
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>TUGAS</th>
+              <th>DEADLINE</th>
+              <th>PRIORITAS</th>
+              <th>STATUS</th>
+              <th id="actionHeader">AKSI</th>
+            </tr>
+          </thead>
+          <tbody id="taskTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        <div class="empty-icon">▤</div>
+        <strong>Belum ada tugas</strong>
+        <p>Tugas yang tersedia akan muncul di sini.</p>
+      </div>
+
+      <p id="pageMessage" class="message" role="status"></p>
+    </section>
+
+    <footer class="footer">
+      InternFlow • Internship task management
+    </footer>
+  </main>
+
+  <!-- DIALOG GANTI PASSWORD -->
+  <dialog id="passwordDialog" class="task-dialog">
+    <form id="changePasswordForm">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">ACCOUNT SECURITY</p>
+          <h2>Ganti Password</h2>
+        </div>
+
+        <button
+          id="closePasswordDialog"
+          class="close-btn"
+          type="button"
+          aria-label="Tutup"
+        >
+          ×
+        </button>
+      </div>
+
+      <p class="muted">
+        Buat kata sandi baru untuk akun InternFlow kamu.
+      </p>
+
+      <label for="newPassword">Password baru</label>
+      <input
+        id="newPassword"
+        type="password"
+        autocomplete="new-password"
+        minlength="8"
+        placeholder="Minimal 8 karakter"
+        required
+      >
+
+      <label for="confirmPassword">Konfirmasi password baru</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        autocomplete="new-password"
+        minlength="8"
+        placeholder="Ulangi password baru"
+        required
+      >
+
+      <div class="dialog-actions">
+        <button
+          id="cancelPasswordDialog"
+          class="outline-btn"
+          type="button"
+        >
+          Batal
+        </button>
+
+        <button
+          id="savePasswordButton"
+          class="primary-btn"
+          type="submit"
+        >
+          Simpan Password
+        </button>
+      </div>
+
+      <p id="passwordMessage" class="message" role="status"></p>
+    </form>
+  </dialog>
+
+  <!-- DIALOG TAMBAH / EDIT TUGAS -->
+  <dialog id="taskDialog" class="task-dialog">
+    <form id="taskForm">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">TASK MANAGEMENT</p>
+          <h2 id="dialogTitle">Tambah tugas</h2>
+        </div>
+
+        <button
+          id="closeDialog"
+          class="close-btn"
+          type="button"
+          aria-label="Tutup"
+        >
+          ×
+        </button>
+      </div>
+
+      <label for="taskTitle">Nama tugas</label>
+      <input
+        id="taskTitle"
+        name="title"
+        required
+        maxlength="180"
+        placeholder="Membuat laporan mingguan"
+      >
+
+      <label for="category">Kategori</label>
+      <input
+        id="category"
+        name="category"
+        maxlength="80"
+        placeholder="Administrasi"
+      >
+
+      <div class="form-row">
+        <div>
+          <label for="deadline">Deadline</label>
+          <input id="deadline" name="deadline" type="date">
+        </div>
+
+        <div>
+          <label for="priority">Prioritas</label>
+          <select id="priority" name="priority">
+            <option value="low">Rendah</option>
+            <option value="medium" selected>Sedang</option>
+            <option value="high">Tinggi</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="pending">Belum mulai</option>
+        <option value="progress">Berjalan</option>
+        <option value="completed">Selesai</option>
+      </select>
+
+      <div class="dialog-actions">
+        <button id="cancelDialog" class="outline-btn" type="button">
+          Batal
+        </button>
+
+        <button class="primary-btn" type="submit">
+          Simpan tugas
+        </button>
+      </div>
+
+      <p id="formMessage" class="message" role="status"></p>
+    </form>
+  </dialog>
+
+  <!-- SUPABASE DAN JAVASCRIPT APLIKASI -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>
