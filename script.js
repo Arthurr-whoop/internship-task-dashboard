@@ -49,8 +49,30 @@ const initialTasks = [
     status: "completed"
   }
 ];
+let tasks = [];
 
-let tasks = [...initialTasks];
+async function loadTasks() {
+  const { data, error } = await supabaseClient
+    .from("tasks")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Gagal mengambil tugas:", error.message);
+    return;
+  }
+
+  tasks = (data || []).map(task => ({
+    id: task.id,
+    title: task.title,
+    category: task.category || "Umum",
+    deadline: task.due_date || "",
+    priority: task.priority || "medium",
+    status: task.status || "pending"
+  }));
+
+  renderTasks();
+}
 
 const statusLabels = {
   pending: "Belum mulai",
@@ -272,4 +294,4 @@ tableBody.addEventListener("click", event => {
   renderTasks();
 });
 
-renderTasks();
+loadTasks();
