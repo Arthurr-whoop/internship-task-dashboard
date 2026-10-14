@@ -1,4 +1,12 @@
 
+const SUPABASE_URL = "https://qqczmweakaegflvcpnrq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6UX7lqrRNm7-exhxypjHJw_jyCtCbuw";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const initialTasks = [
   {
     id: 1,
